@@ -1,0 +1,27 @@
+.btn{
+  font-size: 1rem;
+  padding: 1rem;
+  color: #fff;
+  border:none;
+  background: rgb(87, 87, 87);
+  border-radius: 0.5rem;
+  margin: 0.5rem 0;
+  width: 20%;
+  cursor: pointer;
+}
+
+.btn:hover{
+  background:rgb(61, 61, 61);
+}
+
+.ta{
+  height: 40vh;
+  width: 60%;
+  margin: 1rem;
+  border:none;
+  border-radius: 0.5rem;
+  background:rgb(61, 61, 61);
+  color: #fff;
+  font-size: 1rem;
+  padding: 1rem;
+}
