@@ -1,6 +1,6 @@
 /** @format */
 import 'bulmaswatch/superhero/bulmaswatch.min.css';
-import CodeCell from './CodeCell';
+import CodeCell from './code-cell';
 
 function App() {
   return (

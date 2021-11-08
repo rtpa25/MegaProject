@@ -1,13 +1,13 @@
 /** @format */
 
-import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
+import './code-editor.css';
+import './syntax.css';
 import { useRef } from 'react';
+import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
 import codeShift from 'jscodeshift';
 import Highlighter from 'monaco-jsx-highlighter';
-import './CodeEditor.css';
-import './syntax.css';
 
 interface CodeEditorProps {
   initialValue: string;
@@ -16,6 +16,7 @@ interface CodeEditorProps {
 
 const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
   const editorRef = useRef<any>();
+
   const onEditorDidMount: EditorDidMount = (getValue, monacoEditor) => {
     editorRef.current = monacoEditor;
     monacoEditor.onDidChangeModelContent(() => {
@@ -25,12 +26,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
     monacoEditor.getModel()?.updateOptions({ tabSize: 2 });
 
     const highlighter = new Highlighter(
-      //@ts-ignore
+      // @ts-ignore
       window.monaco,
       codeShift,
       monacoEditor
     );
-    //apply syntax highlighting when the code is being changed
     highlighter.highLightOnDidChangeModelContent(
       () => {},
       () => {},
@@ -40,9 +40,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
   };
 
   const onFormatClick = () => {
-    //get current value
+    // get current value from editor
     const unformatted = editorRef.current.getModel().getValue();
-    //format the value
+
+    // format that value
     const formatted = prettier
       .format(unformatted, {
         parser: 'babel',
@@ -52,12 +53,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
         singleQuote: true,
       })
       .replace(/\n$/, '');
-    //set the formatted value back in the editor
+
+    // set the formatted value back in the editor
     editorRef.current.setValue(formatted);
   };
 
   return (
-    <div className='wrapper'>
+    <div className='editor-wrapper'>
       <button
         className='button button-format is-primary is-small'
         onClick={onFormatClick}>

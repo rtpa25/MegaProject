@@ -1,55 +1,66 @@
 /** @format */
 
-import { useEffect, useRef } from 'react';
-import classes from './Preview.module.css';
+import './preview.css';
+import { useRef, useEffect } from 'react';
 
 interface PreviewProps {
   code: string;
+  err: string;
 }
 
 const html = `
-  <html>
-  <head></head>
-  <body>
-    <div id="root"></div>
-    <script>
-      window.addEventListener(
-        'message',
-        (event) => {
-          try {
-            eval(event.data);
-          } catch (error) {
+    <html>
+      <head>
+        <style>html { background-color: white; }</style>
+      </head>
+      <body>
+        <div id="root"></div>
+        <script>
+          const handleError = (err) => {
             const root = document.querySelector('#root');
-            root.innerHTML =
-              '<div style="color: red;"><h4>My App is great your code suck</h4>' +
-              error +
-              '</div>';
-            console.error(error);
-          }
-        },
-        false
-      );
-    </script>
-  </body>
-  </html>
-`;
+            root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
+            console.error(err);
+          };
 
-const Preview: React.FC<PreviewProps> = ({ code }) => {
-  const iFrameRef = useRef<any>();
+          window.addEventListener('error', (event) => {
+            event.preventDefault();
+            handleError(event.error);
+          });
+
+          window.addEventListener('message', (event) => {
+            try {
+              eval(event.data);
+            } catch (err) {
+              handleError(err);
+            }
+          }, false);
+        </script>
+      </body>
+    </html>
+  `;
+
+const Preview: React.FC<PreviewProps> = ({ code, err }) => {
+  const iframe = useRef<any>();
 
   useEffect(() => {
-    iFrameRef.current.srcdoc = html;
-    iFrameRef.current.contentWindow.postMessage(code, '*');
+    iframe.current.srcdoc = html;
+    setTimeout(() => {
+      //this is to update the iframe html dom to refresh after every 50ms
+      iframe.current.contentWindow.postMessage(code, '*');
+    }, 50);
   }, [code]);
 
+  console.log(err);
+
   return (
-    <div className={classes.previewWrapper}>
+    <div className='preview-wrapper'>
       <iframe
-        ref={iFrameRef}
-        srcDoc={html}
         title='preview'
+        ref={iframe}
         sandbox='allow-scripts'
+        srcDoc={html}
       />
+      {err && <div className='preview-error'>{err}</div>}
     </div>
   );
 };

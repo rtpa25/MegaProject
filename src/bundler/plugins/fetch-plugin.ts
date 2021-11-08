@@ -12,7 +12,6 @@ export const fetchPlugin = (inputCode: string) => {
   return {
     name: 'fetch-plugin',
     setup(build: esbuild.PluginBuild) {
-      //the functions only run when the file matches with the filter criteria
       build.onLoad({ filter: /(^index\.js$)/ }, () => {
         return {
           loader: 'jsx',
@@ -20,7 +19,6 @@ export const fetchPlugin = (inputCode: string) => {
         };
       });
 
-      //Managing cached modules
       build.onLoad({ filter: /.*/ }, async (args: any) => {
         const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
           args.path
@@ -31,7 +29,6 @@ export const fetchPlugin = (inputCode: string) => {
         }
       });
 
-      //if we donot return in a single onLoad then it will just pass in to the next onload
       build.onLoad({ filter: /.css$/ }, async (args: any) => {
         const { data, request } = await axios.get(args.path);
         const escaped = data
