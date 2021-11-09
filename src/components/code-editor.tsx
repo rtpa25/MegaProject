@@ -25,6 +25,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
 
     monacoEditor.getModel()?.updateOptions({ tabSize: 2 });
 
+    //random code from the internet that does syntax highlighting in JSX code
     const highlighter = new Highlighter(
       // @ts-ignore
       window.monaco,

@@ -10,8 +10,11 @@ interface ResizableProps {
 
 const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
   let resizableProps: ResizableBoxProps;
+  //state associated with the height if the element
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+  //state associated with the width if the element
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  //state associated with the width on change of screen sizes
   const [width, setWidth] = useState(window.innerWidth * 0.75);
 
   useEffect(() => {
@@ -21,6 +24,8 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
         clearTimeout(timer);
       }
       timer = setTimeout(() => {
+        //this changes the width of the element according to the change in screen sizes
+        //but rather than doing continuously it does it after 10ms of screen size update
         setInnerHeight(window.innerHeight);
         setInnerWidth(window.innerWidth);
         if (window.innerWidth * 0.75 < width) {
@@ -33,7 +38,7 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
     return () => {
       window.removeEventListener('resize', listener);
     };
-  }, []);
+  }, [width]);
 
   if (direction === 'horizontal') {
     resizableProps = {

@@ -2,15 +2,24 @@
 
 import MDEditor from '@uiw/react-md-editor';
 import { useState, useEffect, useRef } from 'react';
+import { useAppDispatch } from '../hooks';
+import { updateCell } from '../store/slice/cells-slice';
+import { Cell } from '../store/cell';
 import './text-editor.css';
 
-const TextEditor: React.FC = () => {
+interface TextEditorProps {
+  cell: Cell;
+}
+
+const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
+  //this state manages wether the user is still editing or wants to see in the view mode
   const [editing, setEditing] = useState(false);
-  const [value, setValue] = useState('# Header');
   const ref = useRef<HTMLDivElement | null>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const listener = (event: MouseEvent) => {
+      //id statement catches the case when user clicks anywhere but on the markdown itself
       if (
         ref.current &&
         event.target &&
@@ -18,7 +27,6 @@ const TextEditor: React.FC = () => {
       ) {
         return;
       }
-
       setEditing(false);
     };
     document.addEventListener('click', listener, { capture: true });
@@ -30,7 +38,12 @@ const TextEditor: React.FC = () => {
   if (editing) {
     return (
       <div className='text-editor' ref={ref}>
-        <MDEditor value={value} onChange={(v) => setValue(v || '')} />
+        <MDEditor
+          value={cell.content}
+          onChange={(v) =>
+            dispatch(updateCell({ id: cell.id, content: v || '' }))
+          }
+        />
       </div>
     );
   }
@@ -42,7 +55,7 @@ const TextEditor: React.FC = () => {
         setEditing(true);
       }}>
       <div className='card-content'>
-        <MDEditor.Markdown source={value} />
+        <MDEditor.Markdown source={cell.content || 'Click to edit'} />
       </div>
     </div>
   );
