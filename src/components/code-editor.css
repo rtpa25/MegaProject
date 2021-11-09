@@ -10,9 +10,14 @@
   right: 5px;
   z-index: 20;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease-in 0.2s;
 }
 
 .editor-wrapper:hover .button-format {
   opacity: 1;
+  background-color: #953b00;
+}
+
+.editor-wrapper:hover .button-format:hover{
+  background-color: #da5700;
 }

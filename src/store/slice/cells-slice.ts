@@ -15,13 +15,8 @@ interface CellsState {
 const initialState: CellsState = {
   loading: false,
   error: null,
-  order: ['test-1', 'test-2', 'test-3', 'test-4'],
-  data: {
-    'test-1': { id: 'test-1', type: 'code', content: '' },
-    'test-2': { id: 'test-2', type: 'text', content: '' },
-    'test-3': { id: 'test-3', type: 'code', content: '' },
-    'test-4': { id: 'test-4', type: 'text', content: '' },
-  },
+  order: [],
+  data: {},
 };
 
 const CellSlice = createSlice({
@@ -50,9 +45,12 @@ const CellSlice = createSlice({
       state.order[index] = state.order[targetIndex];
       state.order[targetIndex] = cellId;
     },
-    insertCellBefore(
+    insertCellAfter(
       state,
-      action: PayloadAction<{ cellId: string; cellType: 'code' | 'text' }>
+      action: PayloadAction<{
+        cellId: string | null;
+        cellType: 'code' | 'text';
+      }>
     ) {
       const { cellId, cellType } = action.payload;
       const cell: Cell = {
@@ -65,9 +63,9 @@ const CellSlice = createSlice({
       const foundIndex = state.order.findIndex((id) => id === cellId);
 
       if (foundIndex < 0) {
-        state.order.push(cell.id);
+        state.order.unshift(cell.id);
       } else {
-        state.order.splice(foundIndex, 0, cell.id);
+        state.order.splice(foundIndex + 1, 0, cell.id);
       }
     },
   },
@@ -77,7 +75,7 @@ const randomId = () => {
   return Math.random().toString(36).substr(2, 5);
 };
 
-export const { updateCell, deleteCell, moveCell, insertCellBefore } =
+export const { updateCell, deleteCell, moveCell, insertCellAfter } =
   CellSlice.actions;
 
 export default CellSlice.reducer;
