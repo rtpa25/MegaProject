@@ -2,6 +2,7 @@
 
 import { useAppDispatch } from '../hooks';
 import { insertCellAfter } from '../store/slice/cells-slice';
+import AddCellButton from './add-cell-button';
 import './add-cell.css';
 
 interface AddCellProps {
@@ -14,26 +15,18 @@ const AddCell: React.FC<AddCellProps> = ({ prevCellId, forceVisible }) => {
   return (
     <div className={`add-cell ${forceVisible && 'force-visible'}`}>
       <div className='add-buttons'>
-        <button
-          className='button is-rounded is-primary is-small'
-          onClick={() => {
-            dispatch(insertCellAfter({ cellId: prevCellId, cellType: 'code' }));
-          }}>
-          <span className='icon is-small'>
-            <i className='fas fa-plus'></i>
-          </span>
-          <span>Code</span>
-        </button>
-        <button
-          className='button is-rounded is-primary is-small'
-          onClick={() => {
-            dispatch(insertCellAfter({ cellId: prevCellId, cellType: 'text' }));
-          }}>
-          <span className='icon is-small'>
-            <i className='fas fa-plus'></i>
-          </span>
-          <span>Text</span>
-        </button>
+        <AddCellButton
+          onClick={() =>
+            dispatch(insertCellAfter({ cellId: prevCellId, cellType: 'code' }))
+          }
+          buttonText={'Code'}
+        />
+        <AddCellButton
+          onClick={() =>
+            dispatch(insertCellAfter({ cellId: prevCellId, cellType: 'text' }))
+          }
+          buttonText={'Text'}
+        />
       </div>
       <div className='divider'></div>
     </div>

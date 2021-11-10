@@ -24,8 +24,6 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
         clearTimeout(timer);
       }
       timer = setTimeout(() => {
-        //this changes the width of the element according to the change in screen sizes
-        //but rather than doing continuously it does it after 10ms of screen size update
         setInnerHeight(window.innerHeight);
         setInnerWidth(window.innerWidth);
         if (window.innerWidth * 0.75 < width) {
