@@ -2,10 +2,12 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import CellSliceActions from './slice/cells-slice';
+import CodeBundleActions from './slice/code-bundle-slice';
 
 const store = configureStore({
   reducer: {
     cell: CellSliceActions,
+    bundle: CodeBundleActions,
   },
 });
 
