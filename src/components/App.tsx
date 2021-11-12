@@ -7,7 +7,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 function App() {
   return (
     <div>
-      <h3 className='subtitle is-1 head'>J book</h3>
+      <h3 className='subtitle is-1 head'>R book</h3>
       <CellList />
     </div>
   );
